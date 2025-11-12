@@ -59,26 +59,25 @@ function App() {
     }
 
     const headers = ['Data/Hora', 'Tipo', 'Transportadora', 'Placa', 'Motorista', 'CPF', 'Ajudante', 'CPF Ajudante', 'Operação', 'Cliente'];
-    const csvContent = [
-      headers.join(','),
-      ...registros.map(r => [
-        r.dataHora,
-        r.tipo,
-        r.transportadora,
-        r.placa,
-        r.motorista,
-        r.cpf,
-        r.ajudante || '-',
-        r.cpfAjudante || '-',
-        r.operacao,
-        r.cliente
-      ].join(','))
-    ].join('\n');
+    const linhas = registros.map(r => [
+      r.dataHora,
+      r.tipo,
+      r.transportadora,
+      r.placa,
+      r.motorista,
+      r.cpf,
+      r.ajudante || '-',
+      r.cpfAjudante || '-',
+      r.operacao,
+      r.cliente
+    ].join(','));
+
+    const csvContent = [headers.join(','), ...linhas].join('\\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = \`registros_\${new Date().toISOString().split('T')[0]}.csv\`;
+    link.download = `registros_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
   };
 
@@ -242,7 +241,7 @@ function App() {
           ) : (
             <div className="registros-list">
               {registros.map((registro) => (
-                <div key={registro.id} className={\`registro-card \${registro.tipo}\`}>
+                <div key={registro.id} className={`registro-card ${registro.tipo}`}>
                   <div className="registro-header">
                     <span className="registro-tipo">
                       {registro.tipo === 'entrada' ? '🟢 ENTRADA' : '🔴 SAÍDA'}
