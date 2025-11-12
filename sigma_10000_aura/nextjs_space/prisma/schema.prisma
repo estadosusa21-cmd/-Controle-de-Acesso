@@ -1,0 +1,34 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/sigma_10000_aura/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Registro {
+  id                      String    @id @default(uuid())
+  dataHoraChegada        DateTime
+  transportadora         String
+  placaCarreta           String
+  placaCavalo            String?
+  nomeMotorista          String
+  rgCpfMotorista         String
+  temAjudante            Boolean   @default(false)
+  nomeAjudante           String?
+  rgCpfAjudante          String?
+  tipoOperacao           String // 'Descarregar' ou 'Coletar'
+  cliente                String
+  assinaturaMotorista    String // base64 da imagem
+  dataHoraSaida          DateTime?
+  assinaturaResponsavel  String? // base64 da imagem
+  status                 String   @default("No Pátio") // 'No Pátio' ou 'Saiu'
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("registros")
+}
